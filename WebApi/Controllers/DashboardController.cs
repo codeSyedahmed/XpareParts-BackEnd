@@ -1,17 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
+using System;
 using WebApi.Models;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebApi.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]")]
     public class DashboardController : ControllerBase
     {
-        private static readonly string[] Cust = new[]
+        public List<int> dashboard = new List<int>()
         {
-        "+200", "+250","+100","+400","+200"
-    };
+            300,
+            4500,
+            50000,
+            100
+        };
 
 
         private readonly ILogger<DashboardController> _logger;
@@ -22,29 +30,17 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = "GetSuperAdminStats")]
-        public IEnumerable<Shops> GetSuperAdminStats()
+        public List<int> GetSuperAdminStats()
         {
-            return Enumerable.Range(0,1).Select(index => new Shops
-            {
-                shops = Random.Shared.Next(10,300),
-                wholesellers = Random.Shared.Next(50,4500),
-                revenue = Random.Shared.Next(50000),
-                customers = Random.Shared.Next(200)
-            })
-            .ToArray();
+            
+            return dashboard;
         }
 
-        [HttpGet(Name = "GetSuperAdminStats")]
-        public IEnumerable<Shops> GetSuperAdminStats()
+        [HttpGet("{id}")]
+        public int GetSuperAdminStats(int id)
         {
-            return Enumerable.Range(0, 1).Select(index => new Shops
-            {
-                shops = Random.Shared.Next(10, 300),
-                wholesellers = Random.Shared.Next(50, 4500),
-                revenue = Random.Shared.Next(50000),
-                customers = Random.Shared.Next(200)
-            })
-            .ToArray();
+            return dashboard.ElementAt(id);
         }
+
     }
 }
