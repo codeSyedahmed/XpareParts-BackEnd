@@ -13,12 +13,14 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class DashboardController : ControllerBase
     {
-        public List<int> dashboard = new List<int>()
+        
+        public List<object> dashboard = new List<object>
         {
-            300,
-            4500,
-            50000,
-            100
+            new { shops = 300},
+            new { wholesellers = 3000 },
+            new { revenue = 600000 },
+            new { customers = 200 }
+           
         };
 
 
@@ -30,16 +32,23 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = "GetSuperAdminStats")]
-        public List<int> GetSuperAdminStats()
+        public List<object> GetSuperAdminStats()
         {
-            
+
             return dashboard;
         }
 
         [HttpGet("{id}")]
-        public int GetSuperAdminStats(int id)
+        public object GetSuperAdminStats(int id)
         {
             return dashboard.ElementAt(id);
+        }
+
+        [HttpPost]
+        public object PostSuperAdminStats(List<object> list)
+        {
+            dashboard.Add(list);
+            return dashboard;
         }
 
     }
