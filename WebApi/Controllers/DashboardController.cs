@@ -13,16 +13,12 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class DashboardController : ControllerBase
     {
-        
-        public List<object> dashboard = new List<object>
-        {
-            new { shops = 300},
-            new { wholesellers = 3000 },
-            new { revenue = 600000 },
-            new { customers = 200 }
-           
-        };
 
+        public static List<Dashboard> dashboard = new()
+        {
+            new Dashboard { shops = 300, wholesellers = 4500, revenue = 60000, customers = 100 }
+
+};
 
         private readonly ILogger<DashboardController> _logger;
 
@@ -32,24 +28,35 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = "GetSuperAdminStats")]
-        public List<object> GetSuperAdminStats()
+        public List<Dashboard> GetSuperAdminStats()
         {
-
             return dashboard;
         }
 
         [HttpGet("{id}")]
-        public object GetSuperAdminStats(int id)
+        public IActionResult GetSuperAdminStats(int id)
         {
-            return dashboard.ElementAt(id);
+            if (id < 0 || id >= dashboard.Count)
+            {
+                return NotFound(); // Or return an appropriate HTTP status code for invalid index
+            }
+            return Ok(dashboard[id]);
         }
 
         [HttpPost]
-        public object PostSuperAdminStats(List<object> list)
+        public IActionResult PostSuperAdminStats([FromBody] Dashboard obj)
         {
-            dashboard.Add(list);
-            return dashboard;
+            dashboard.Add(obj);
+            return Ok(obj);
         }
 
+
+        [HttpDelete("{id}")]
+        public IActionResult DelSuperAdminStats(int id)
+        {
+            var current = dashboard.ElementAt(id);
+            dashboard.Remove(current);
+            return Ok(dashboard); 
+        }
     }
 }
